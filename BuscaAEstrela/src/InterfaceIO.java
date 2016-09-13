@@ -25,6 +25,13 @@ public void insereTabuleiro(){
 		
 		}
 	}
+	BuscaAStar busca = new BuscaAStar();
+	int qtdPecasFora = busca.getQtdPecasForaDoLugar(tab);
+	int manDistance = busca.getManhattanDistance(tab);
+	System.out.println("Quantidade de pecas fora do lugar: "+ qtdPecasFora);
+	System.out.println("Manhattan distance : "+ manDistance);
+	
+	
 	mostraTabuleiro(tab);
 }
 
@@ -55,5 +62,6 @@ public void mostraTabuleiro(int [][] tabuleiro){
 	JOptionPane.showMessageDialog(null,saida);
 	
 }
+
 
 }
