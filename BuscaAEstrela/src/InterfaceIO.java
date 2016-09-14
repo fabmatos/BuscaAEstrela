@@ -28,8 +28,10 @@ public void insereTabuleiro(){
 	BuscaAStar busca = new BuscaAStar();
 	int qtdPecasFora = busca.getQtdPecasForaDoLugar(tab);
 	int manDistance = busca.getManhattanDistance(tab);
+	int qtCircular = busca.getQuantidadeTrocas(tab);
 	System.out.println("Quantidade de pecas fora do lugar: "+ qtdPecasFora);
 	System.out.println("Manhattan distance : "+ manDistance);
+	System.out.println("Quantidade pecas invertidas : "+ qtCircular);
 	
 	
 	mostraTabuleiro(tab);
