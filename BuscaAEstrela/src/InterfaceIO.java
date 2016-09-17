@@ -3,8 +3,7 @@ import javax.swing.JOptionPane;
 public class InterfaceIO {
 	
 public void insereTabuleiro(){
-	
-	BuscaAStar busca = new BuscaAStar();
+
 	int [][] tab = new int[3][3];
 	JOptionPane.showMessageDialog(null, "Digite o tabuleiro: \n"
 			+ "Valores de entrada permitidos: 1 a 8 \n"
@@ -28,16 +27,20 @@ public void insereTabuleiro(){
 		}
 	}
 	
-	int qtdPecasFora = busca.getQtdPecasForaDoLugar(tab);
-	int manDistance = busca.getManhattanDistance(tab);
-	int qtCircular = busca.getQuantidadeTrocas(tab);
+	Nodo nodo = new Nodo(tab);
+	BuscaAStar busca = new BuscaAStar();
+	int qtdPecasFora = busca.getQtdPecasForaDoLugar(nodo.getTab());
+	int manDistance = busca.getManhattanDistance(nodo.getTab());
+	int qtCircular = busca.getQuantidadeTrocas(nodo.getTab());
+	int heuristica = busca.getFuncao(nodo);
 	System.out.println("Quantidade de pecas fora do lugar: "+ qtdPecasFora);
 	System.out.println("Manhattan distance : "+ manDistance);
-	System.out.println("Quantidade pecas invertidas : "+ qtCircular);;
+	System.out.println("Quantidade pecas invertidas : "+ qtCircular);
+	System.out.println("Valor da heurística: "+ heuristica);
 
 	
 	
-	mostraTabuleiro(tab);
+	mostraTabuleiro(nodo.getTab());
 }
 
 public boolean valorJaExisteNoTabuleiro(int valor, int tabuleiro[][]){

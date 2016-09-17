@@ -1,13 +1,38 @@
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.Stack;
 
 public class BuscaAStar {
 	
-	protected Nodo nodoPai;
+	protected Nodo nodo;
 	protected int qtdEstados; //Quantidade total de estados percorridos ate ordenacao
 	protected int qtdNodosFronteira; //Maior quantidade de nodos da fronteira
+	protected ArrayList<Nodo> visitados = new ArrayList<Nodo>();//Lista de nodos já visitados
+	protected ArrayList<Nodo> fronteira = new ArrayList<Nodo>();//Lista de nodos da fronteira
+	protected Stack<Nodo> caminho = new Stack<Nodo>();//Pilha de nodos para armazenar o caminho da solução do tabuleiro
+	protected final int [][] objetivo = {{1,2,3},{4,5,6},{7,8,0}};//Nodo objetivo
 	
-	protected final int [][] objetivo = {{1,2,3},{4,5,6},{7,8,0}};
 	
-	//Heuristica 1
+	public Stack<Nodo> resolver(Nodo nodo){
+		
+		return this.caminho;
+	}
+	//Retorna o valor da f(n) = g(n)+h(n)
+	public int getFuncao(Nodo node){
+		node.setProfundidade(1);
+		return this.getCusto(node)+this.getHeuristica(node.getTab());
+	}
+	//Cálculo do custo até determinado estado do tabuleiro
+	public int getCusto(Nodo nodo){
+		return nodo.getProfundidade();
+	}
+	//Cálculo das 3 heurísticas(Soma)
+	public int getHeuristica(int[][]tabuleiro){
+		return this.getQtdPecasForaDoLugar(tabuleiro)+
+				this.getManhattanDistance(tabuleiro)+
+				this.getQuantidadeTrocas(tabuleiro);
+	}
+	//Heuristica 1 : Contador da quantidade de peças fora do lugar
 	public int getQtdPecasForaDoLugar(int [][] tabuleiro){
 		int [][] objetivo = new int[3][3];
 		objetivo = this.getNodoObjetivo();
@@ -67,11 +92,11 @@ public class BuscaAStar {
 		return quantDuplas;
 		
 	}
-	
+	//Retorna o nodo objetivo
 	public int [][] getNodoObjetivo(){
 		return this.objetivo;
 	}
-	
+	//Retorna true se o nodo for nodo objetivo
 	public boolean ehNodoObjetivo(int [][] nodo){
 		int qtdIguais = 0;//conta quantidade de valores nodo = objetivo
 		for(int l = 0; l < nodo.length; l++){
@@ -112,15 +137,6 @@ public class BuscaAStar {
 		}
 		return posicao;
 		
-	}
-	public boolean valorEstaEmPosInversaoDireta(int valor){
-		boolean retorno = false;
-		for(int linha = 0; linha < 3; linha++){
-			for(int coluna = 0; coluna < 3; coluna++){
-				
-			}
-		}
-		return retorno;
 	}
 	//Retorna true se o valor esta em posicao de inversao direta
 	public boolean valorEstaEmPosicaoInversaoDireta(int valor, int[][]tabuleiro){
