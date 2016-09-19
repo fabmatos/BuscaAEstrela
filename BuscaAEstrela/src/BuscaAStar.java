@@ -23,8 +23,11 @@ public class BuscaAStar {
 		nodo.setProfundidade(0);
 		nodo.setCustoTotal(this.getFuncao(nodo));
 		this.fronteira.add(nodo);
+		
 		if(this.ehNodoObjetivo(nodo.getTab())){
 			
+			System.out.println("Tamanho máximo de nodos na fronteira: "+this.qtdNodosFronteira);
+			this.mostraCaminho(nodo);
 		}
 		while(!this.ehNodoObjetivo(nodo.getTab())){
 			
@@ -35,6 +38,32 @@ public class BuscaAStar {
 			this.caminho.add(fronteira.get(i));
 		}
 		return this.caminho;
+	}
+	//Empilha o caminho do nodo final até o inicial
+	public void mostraCaminho(Nodo nodoFim){
+		
+		boolean isFinal = false;//Variavel de controle para se chegar ate o nodo inicial
+		Nodo paiTemp;//Nodo para armazenar o nodo pai de forma temporaria
+		Stack <Nodo> caminho = new Stack<Nodo>();//Pilha contendo o caminho da solução
+		
+		while(!isFinal){//Empilha do nodo objetivo até o nodo inicial
+			caminho.push(nodoFim);
+			if(nodoFim.getNodoPai() != null){
+				paiTemp = nodoFim.getNodoPai();
+				nodoFim = paiTemp;
+			}
+			else{
+				isFinal = true;
+			}
+		}
+		
+		System.out.println("Quantidade de níveis até o objetivo: "+(caminho.size()-1));//Mostra a quantidade de níveis descidos
+		for(int i = 0; i < caminho.size();i++){
+			paiTemp = caminho.pop();
+			this.mostraTabuleiro(paiTemp.getTab());
+		}
+		
+		
 	}
 	//Adiciona os filhos na fronteira caso ja nao tenham sido expandidos
 	public void adicionaNaFronteira(ArrayList<Nodo> nodosFilhos){
@@ -47,7 +76,13 @@ public class BuscaAStar {
 			this.qtdNodosFronteira = fronteira.size();
 		}
 	}
-	//Remove um nodo
+	//Remove um nodo da fronteira e o adiciona na lista de visitados
+	public void removeDaFronteira(Nodo aRemover){
+		
+		this.visitados.add(aRemover);//Adiciona em visitados
+		this.fronteira.remove(aRemover);//Remove da fronteira
+		
+	}
 	//Expande os filhos de um nodo
 	public ArrayList<Nodo> expandirFilhos(Nodo nodoPai){
 		
@@ -304,19 +339,12 @@ public class BuscaAStar {
 	}
 	/////////////////////////////////////////////////////////////////////////////////A ser excluido
 	public void mostraTabuleiro(int [][] tabuleiro){
-		String saida = "";
-		for(int l = 0; l < 3; l++){
-			for(int c = 0; c < 3; c++){
-				
-				if(c == 2)
-					saida += tabuleiro[l][c]+ "\n";
-				else
-					saida += tabuleiro[l][c]+ "  ";
-				
-				
-			}
-		}
-		JOptionPane.showMessageDialog(null,saida);
+		
+		System.out.println(tabuleiro[0][0] + "|" + tabuleiro[0][1] + "|" + tabuleiro[0][2]);
+		System.out.println("- - -");
+		System.out.println(tabuleiro[1][0] + "|" + tabuleiro[1][1] + "|" + tabuleiro[1][2]);
+		System.out.println("- - -");
+		System.out.println(tabuleiro[2][0] + "|" + tabuleiro[2][1] + "|" + tabuleiro[2][2] + "\n \n");
 		
 	}
 	//Realiza a copia de uma determinada matriz
