@@ -90,9 +90,5 @@ public class Nodo implements Comparable<Nodo>{
 		return this.idNodo;
 	}
 	
-	public int getCustoTotal(){
-		return this.custoTotal;
-	}
-	
 
 }

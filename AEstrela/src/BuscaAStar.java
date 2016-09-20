@@ -11,7 +11,7 @@ public class BuscaAStar {
 	
 	protected Nodo nodo;
 	protected int qtdEstados; //Quantidade total de estados percorridos ate ordenacao
-	protected int qtdNodosFronteira = 0; //Maior quantidade de nodos da fronteira
+	protected int qtdNodosFronteira; //Maior quantidade de nodos da fronteira
 	protected ArrayList<Nodo> visitados = new ArrayList<Nodo>();//Lista de nodos já visitados
 	protected ArrayList<Nodo> fronteira = new ArrayList<Nodo>();//Lista de nodos da fronteira
 	protected Queue<Nodo> caminho = new LinkedList<Nodo>();//Fila de nodos para armazenar o caminho da solução do tabuleiro
@@ -20,6 +20,7 @@ public class BuscaAStar {
 	
 	public void resolver(Nodo nodo){
 		this.qtdEstados = 0;
+		this.qtdNodosFronteira = 0;
 		this.fronteira.add(nodo);
 		
 		if(this.ehNodoObjetivo(nodo.getTab())){
@@ -33,7 +34,7 @@ public class BuscaAStar {
 			ArrayList<Nodo> filhos = this.expandirFilhos(nodo);
 			this.adicionaNaFronteira(filhos);
 			this.removeDaFronteira(nodo);
-			nodo = this.getNodoCustoMenor();
+			nodo = this.getNext();
 			if(nodo != null){
 				this.resolver(nodo);
 			}else{
@@ -42,16 +43,13 @@ public class BuscaAStar {
 		}
 	}
 	
-	public Nodo getNodoCustoMenor() {
-		Nodo menorCusto = null;
-		for(Nodo n : this.fronteira) {
-			if(menorCusto == null || n.getCustoTotal() < menorCusto.getCustoTotal()){
-				menorCusto = n;
-			}
-		}
-		return menorCusto;
+	public Nodo getNext() {
+        if(!fronteira.isEmpty()){
+        		return Collections.min(fronteira);
+        }else{
+        		return null;
+        }
     }
-    		
 	//Empilha o caminho do nodo final até o inicial
 	public void mostraCaminho(Nodo nodoFim){
 		
@@ -62,7 +60,8 @@ public class BuscaAStar {
 		while(!isFinal){//Empilha do nodo objetivo até o nodo inicial
 			caminho.push(nodoFim);
 			if(nodoFim.getNodoPai() != null){
-				nodoFim = nodoFim.getNodoPai();
+				paiTemp = nodoFim.getNodoPai();
+				nodoFim = paiTemp;
 			}
 			else{
 				isFinal = true;
@@ -70,8 +69,8 @@ public class BuscaAStar {
 		}
 		
 		System.out.println("Quantidade de níveis até o objetivo: "+(caminho.size()-1)+"\n\n");//Mostra a quantidade de níveis descidos
-		for(int i = caminho.size() -1; i >= 0 ;i--){
-			paiTemp = caminho.get(i);
+		for(int i = 0; i < caminho.size();i++){
+			paiTemp = caminho.pop();
 			this.mostraTabuleiro(paiTemp.getTab());
 		}
 		
@@ -80,7 +79,7 @@ public class BuscaAStar {
 	//Adiciona os filhos na fronteira caso ja nao tenham sido expandidos
 	public void adicionaNaFronteira(ArrayList<Nodo> nodosFilhos){
 		for(Nodo nodo : nodosFilhos){
-			if(!this.visitados.contains(nodo)){//Verifica se o nodo já não foi visitado
+			if(!this.visitados.contains(nodo.getIdNodo())){//Verifica se o nodo já não foi visitado
 				this.fronteira.add(nodo);
 			}
 		}
@@ -311,8 +310,8 @@ public class BuscaAStar {
 		
 		int [] coordenadas = new int [2];
 		coordenadas = this.getPosicaoDoValor(valor, tabuleiro);
-		int l = coordenadas[0];
-		int c = coordenadas[1];
+		int l = coordenadas[0];System.out.println(l);
+		int c = coordenadas[1];System.out.println(c);
 		
 		if(valor==1){
 			if((l==0 && c==1) || (l==1 && c==0))
